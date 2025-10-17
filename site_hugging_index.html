@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Free Hugs 💞</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #f8fbff 0%, #dce9ff 100%);
+      font-family: "Poppins", sans-serif;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    h1 {
+      position: fixed;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 2rem;
+      color: #e91e63;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .hug {
+      position: absolute;
+      width: 180px;
+      height: auto;
+      user-select: none;
+      pointer-events: none;
+      opacity: 0;
+      transition: transform 0.8s ease, opacity 0.8s ease, filter 0.6s ease;
+    }
+
+    .left {
+      transform: translate(-200px, 0) scale(1);
+    }
+
+    .right {
+      transform: translate(200px, 0) scale(1);
+    }
+
+    .hugging-left {
+      transform: translate(-60px, 0) scale(1.1);
+      opacity: 1;
+      filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8)) brightness(1.1);
+    }
+
+    .hugging-right {
+      transform: translate(60px, 0) scale(1.1);
+      opacity: 1;
+      filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8)) brightness(1.1);
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.8);
+      filter: none;
+      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    }
+
+    .message {
+      position: absolute;
+      color: #e91e63;
+      font-size: 1.4rem;
+      font-weight: bold;
+      opacity: 0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.5s ease, transform 1s ease;
+      pointer-events: none;
+    }
+
+    /* Animação do coração */
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-60px) rotate(15deg) scale(1.2);
+      }
+      100% {
+        transform: translateY(-130px) rotate(-15deg) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0;
+      animation: floatHeart 2.2s ease-in-out forwards;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>FREE HUGS FOR YOU! 🫀</h1>
+
+  <script>
+    const images = [
+      "bacteriofago.png",
+      "bacteriofago2.png",
+      "virus.png",
+      "virus2.png",
+      "virus3.png",
+      "virus4.png",
+      "gatinhofofo.png",
+      "cachorrofofo.png"
+    ];
+
+    const sounds = [
+      "ui.mp3",
+      "ele-gosta.mp3",
+      "demais.mp3",
+      "cavalo.mp3",
+      "ao-potência.mp3",
+      "aiaiai.mp3",
+      "aburaburu.mp3"
+    ];
+
+    const messages = [
+      "abraços 💞",
+      "abraços quentinhos ☕",
+      "abraço grátis 🤗",
+      "sodadi 🥹",
+      "você é incrível ✨",
+      "hugs 💖"
+    ];
+
+    const hearts = ["❤️", "🩷", "💜", "💙", "💚", "🧡", "💛"];
+
+    const audioElements = sounds.map(src => {
+      const audio = new Audio(src);
+      audio.preload = "auto";
+      return audio;
+    });
+
+    document.body.addEventListener("click", (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+
+      // Escolhe duas imagens diferentes
+      let i1 = Math.floor(Math.random() * images.length);
+      let i2;
+      do {
+        i2 = Math.floor(Math.random() * images.length);
+      } while (i1 === i2);
+
+      const img1 = images[i1];
+      const img2 = images[i2];
+
+      const leftImg = document.createElement("img");
+      const rightImg = document.createElement("img");
+      leftImg.src = img1;
+      rightImg.src = img2;
+      leftImg.classList.add("hug", "left");
+      rightImg.classList.add("hug", "right");
+
+      leftImg.style.left = `${x}px`;
+      leftImg.style.top = `${y}px`;
+      rightImg.style.left = `${x}px`;
+      rightImg.style.top = `${y}px`;
+
+      document.body.appendChild(leftImg);
+      document.body.appendChild(rightImg);
+
+      // Mensagem
+      const msg = document.createElement("div");
+      msg.classList.add("message");
+      msg.innerText = messages[Math.floor(Math.random() * messages.length)];
+      msg.style.left = `${x - 60}px`;
+      msg.style.top = `${y - 100}px`;
+      document.body.appendChild(msg);
+
+      setTimeout(() => {
+        msg.style.opacity = 1;
+        msg.style.transform = "translateY(-20px)";
+      }, 200);
+
+      // Som
+      const randomSound = audioElements[Math.floor(Math.random() * audioElements.length)];
+      randomSound.currentTime = 0;
+      randomSound.play().catch(err => console.log("Som bloqueado:", err));
+
+      // Abraço
+      setTimeout(() => {
+        leftImg.classList.add("hugging-left");
+        rightImg.classList.add("hugging-right");
+      }, 50);
+
+      // Coração flutuando com rotação 💞
+      setTimeout(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = `${x - 10}px`;
+        heart.style.top = `${y - 80}px`;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2200);
+      }, 900);
+
+      // Desaparecer
+      setTimeout(() => {
+        leftImg.classList.add("fade-out");
+        rightImg.classList.add("fade-out");
+        msg.style.opacity = 0;
+      }, 1300);
+
+      setTimeout(() => {
+        leftImg.remove();
+        rightImg.remove();
+        msg.remove();
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+
+
